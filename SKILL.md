@@ -1,3 +1,12 @@
+---
+name: openclaw-bot-dashboard
+description: >
+  Launch and manage the OpenClaw Dashboard web UI for monitoring all your bots, agents, models, and sessions.
+  Automatically detects OS, checks for updates, installs dependencies, and starts the development server.
+  Supports macOS, Windows, and Linux with automatic git detection and fallback download methods.
+  Triggers: "打开机器人大盘", "打开 bot review", "open openclaw dashboard", "open bot review", "launch bot review".
+---
+
 # OpenClaw Dashboard Skill
 
 Launch and manage the OpenClaw Dashboard web UI for monitoring all your bots, agents, models, and sessions.
