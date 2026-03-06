@@ -242,17 +242,17 @@ for ($i=0; $i -lt 30; $i++) {
 }
 ```
 
-### Step 7: Return access URLs
+### Step 7: Return access URLs (required)
 
-Get local IP address:
+You MUST return both:
+- Local URL
+- LAN URL
+
+First, actually detect the machine's LAN IPv4 address. Do not guess it.
 
 **macOS/Linux:**
 ```bash
-# macOS
-ipconfig getifaddr en0
-
-# Linux
-hostname -I | awk '{print $1}'
+(ipconfig getifaddr en0 || ipconfig getifaddr en1 || hostname -I | awk '{print $1}') 2>/dev/null
 ```
 
 **Windows (PowerShell):**
@@ -260,15 +260,38 @@ hostname -I | awk '{print $1}'
 (Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias "Ethernet*","Wi-Fi*" | Select-Object -First 1).IPAddress
 ```
 
-Return message:
+Rules:
+- You MUST execute an IP detection command before composing the final reply.
+- Do NOT guess or fabricate the LAN IP.
+- Do NOT omit the LAN URL just because localhost works.
+- You MUST include both the local URL and the LAN URL in the final reply.
+- If LAN IP detection fails, you MUST still include the local URL and explicitly say:
+  - 局域网访问地址：获取失败
+  - and briefly mention that LAN IP detection failed.
+- Do NOT end with only a localhost URL.
+
+Return message format:
 ```
 ✅ OpenClaw Dashboard 已启动！
 
 访问地址：
 - 本地访问：http://localhost:3000
-- 局域网访问：http://<IP>:3000
+- 局域网访问：http://<LAN-IP>:3000
 
 Dashboard 会自动读取你的 OpenClaw 配置，展示所有机器人、模型、会话的状态。
+
+需要停止服务时告诉我一声。
+```
+
+If LAN IP detection fails, use:
+```
+✅ OpenClaw Dashboard 已启动！
+
+访问地址：
+- 本地访问：http://localhost:3000
+- 局域网访问：获取失败
+
+原因：未能检测到当前机器的局域网 IPv4 地址。
 
 需要停止服务时告诉我一声。
 ```
